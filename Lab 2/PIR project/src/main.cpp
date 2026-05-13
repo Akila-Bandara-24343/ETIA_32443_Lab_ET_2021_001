@@ -44,9 +44,11 @@ int main(void) {
       //PIR Detection and motion indicating section 
         if (PIND & (1 << PIND2)) {
           UART_print("Motion Detected\r\n"); 
+          PORTD |= (1 << PD3);
           _delay_ms(1000);
         } else {
           UART_print("No Motion is detected\r\n");
+          PORTD &= ~(1 << PD3);
           _delay_ms(1000);
         }
     }
