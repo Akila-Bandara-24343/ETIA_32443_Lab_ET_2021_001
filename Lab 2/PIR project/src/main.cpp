@@ -25,12 +25,28 @@ void UART_print(char *str) {
     }
 }
 
+void tone(uint16_t frequency) {
+
+    uint16_t delay_us = 1000000UL / (2 * frequency);
+
+    PORTD |= (1 << PD5);
+    _delay_us(delay_us);
+
+    PORTD &= ~(1 << PD5);
+    _delay_us(delay_us);
+}
+
+void noTone() {
+
+    PORTD &= ~(1 << PD5);
+}
+
 int main(void) {
 
     UART_init(MYUBRR);
 
   	DDRD &= ~(1 << PD2); // PIR input pin -> Digital pin 2
-    DDRD = (1 << PD4)|(1 << PD3)|(1 << PD7); // Motion detection LED (RED) -> Digital pin 3 ,System detection LED (GREEN) -> Digital pin 4
+    DDRD = (1 << PD4)|(1 << PD3)|(1 << PD5); // Motion detection LED (RED) -> Digital pin 3 ,System detection LED (GREEN) -> Digital pin 4
 
     while (1) {
       
@@ -45,11 +61,15 @@ int main(void) {
         if (PIND & (1 << PIND2)) {
           UART_print("Motion Detected\r\n"); 
           PORTD |= (1 << PD3);
-          _delay_ms(1000);
+          for (int i = 0; i < 200; i++) {
+                tone(1000); // 1 kHz sound
+            }
+          _delay_ms(5000);
         } else {
           UART_print("No Motion is detected\r\n");
           PORTD &= ~(1 << PD3);
-          _delay_ms(1000);
+          noTone();
+          _delay_ms(5000);
         }
     }
     return 0;
