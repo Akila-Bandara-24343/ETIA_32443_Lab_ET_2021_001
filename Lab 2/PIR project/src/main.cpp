@@ -30,10 +30,18 @@ int main(void) {
     UART_init(MYUBRR);
 
   	DDRD &= ~(1 << PD2); // PIR input pin -> Digital pin 2
-    DDRD = (1 << PD3); // Motion detection LED (RED) -> Digital pin 3
-    DDRD = (1 << PD4); // System detection LED (GREEN) -> Digital pin 4
+    DDRD = (1 << PD4)|(1 << PD3)|(1 << PD7); // Motion detection LED (RED) -> Digital pin 3 ,System detection LED (GREEN) -> Digital pin 4
 
     while (1) {
+      
+      //System indicating section 
+        PORTD |= (1 << PD4);
+        _delay_ms(1000);
+        PORTD &= ~(1 << PD4);
+        _delay_ms(1000);
+
+
+      //PIR Detection and motion indicating section 
         if (PIND & (1 << PIND2)) {
           UART_print("Motion Detected\r\n"); 
           _delay_ms(1000);
