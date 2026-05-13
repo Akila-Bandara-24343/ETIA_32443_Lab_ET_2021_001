@@ -25,6 +25,8 @@ void UART_print(char *str) {
     }
 }
 
+
+
 void tone(uint16_t frequency) {
 
     uint16_t delay_us = 1000000UL / (2 * frequency);
@@ -59,17 +61,19 @@ int main(void) {
 
       //PIR Detection and motion indicating section 
         if (PIND & (1 << PIND2)) {
+          //Detection part
           UART_print("Motion Detected\r\n"); 
           PORTD |= (1 << PD3);
           for (int i = 0; i < 200; i++) {
-                tone(1000); // 1 kHz sound
+                tone(1000);
             }
-          _delay_ms(5000);
+          _delay_ms(1000);
         } else {
+          //Not detection part
           UART_print("No Motion is detected\r\n");
           PORTD &= ~(1 << PD3);
           noTone();
-          _delay_ms(5000);
+          _delay_ms(1000);
         }
     }
     return 0;
