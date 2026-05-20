@@ -7,12 +7,12 @@
 
 int main(void) {
     DDRD &= ~((1 << PD2) | (1 << PD3) | (1 << PD4) | (1 << PD5)); // Inputs
-    DDRD |= (1 << PD6) | (1 << PD7);// LEDs
+    PORTD |= (1 << PD2) | (1 << PD3) | (1 << PD4) | (1 << PD5);   // Enable internal pull-ups
+    DDRD |= (1 << PD6) | (1 << PD7);                                // LEDs
 
-    const char pwd[PWD_LEN + 1] = "2134";
+    const char pwd[PWD_LEN + 1] = "1111";
     char inpwd[PWD_LEN + 1];
     uint8_t idx = 0;
-
     memset(inpwd, 0, sizeof(inpwd));
 
     while (1) {
@@ -27,13 +27,11 @@ int main(void) {
             inpwd[idx++] = pressed;
             inpwd[idx] = '\0';
 
-            // Wait for button release
             while ((PIND & (1 << PD2)) == 0 ||
                    (PIND & (1 << PD3)) == 0 ||
                    (PIND & (1 << PD4)) == 0 ||
                    (PIND & (1 << PD5)) == 0);
-
-            _delay_ms(50); // debounce delay
+            _delay_ms(50);
         }
 
         if (idx == PWD_LEN) {
@@ -44,10 +42,9 @@ int main(void) {
                 PORTD &= ~(1 << PD6); // Green OFF
                 PORTD |=  (1 << PD7); // Red ON
             }
-
             memset(inpwd, 0, sizeof(inpwd));
             idx = 0;
-            _delay_ms(1000); // Show result for 1s
+            _delay_ms(1000);
         }
     }
     return 0;
