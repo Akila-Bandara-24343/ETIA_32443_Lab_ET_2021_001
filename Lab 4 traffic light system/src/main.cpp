@@ -1,27 +1,4 @@
-/*
- * Traffic Light Controller - ATmega328P
- * ETIA 32443 - Embedded Systems and Applications
- *
- * Pin Assignment:
- *   PORTB:
- *     PB0 -> Pedestrian Green LED
- *     PB1 -> Pedestrian Red LED
- *     PB2 -> Road Red LED
- *     PB3 -> Road Yellow LED
- *     PB4 -> Road Green LED
- *
- *   PORTD (Input with INPUT_PULLUP):
- *     PD2 -> Emergency Button    (INT0)
- *     PD3 -> Pedestrian Button   (INT1)
- *     PD1 -> Maintenance Button  (PCINT17 / PCINT1)
- *
- * Button Logic: Idle = HIGH, Pressed = LOW (active-low with pull-up)
- *
- * Interrupt Priority (highest to lowest):
- *   1. Emergency    (INT0)
- *   2. Pedestrian   (INT1)
- *   3. Maintenance  (PCINT)
- */
+
 
 #define F_CPU 16000000UL
 #include <avr/io.h>
